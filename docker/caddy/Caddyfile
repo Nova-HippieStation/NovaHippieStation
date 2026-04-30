@@ -1,0 +1,6 @@
+stats.owo.fm {
+    root * /var/www/html/public
+
+    php_fastcgi statbus:9000
+    file_server
+}
