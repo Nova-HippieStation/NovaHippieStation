@@ -15,6 +15,10 @@ WORKDIR /var/www/html
 
 # Install dependencies before copying source for better layer caching.
 COPY slimbus/composer.json slimbus/composer.lock ./
+# slimbus ships composer.json requiring phpdotenv ^4.1 but index.php uses
+# the v2 API (new Dotenv\Dotenv($path)).  Downgrade to v2 so the code works.
+RUN sed -i 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' composer.json \
+    && rm -f composer.lock
 RUN composer install \
         --no-dev \
         --optimize-autoloader \

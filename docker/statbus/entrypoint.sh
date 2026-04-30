@@ -20,10 +20,10 @@ ALT_DB_PASSWORD=${ALT_DB_PASSWORD:-${DB_PASSWORD}}
 ALT_DB_HOST=${ALT_DB_HOST:-mariadb}
 ALT_DB_PORT=${ALT_DB_PORT:-3306}
 
-APP=${APP:-HippieStation Statbus}
-GITHUB=${GITHUB:-HippieStation/HippieStation}
-DEBUG=${DEBUG:-FALSE}
-DISPLAY_ERRORS=${DISPLAY_ERRORS:-FALSE}
+APP="${APP:-HippieStation Statbus}"
+GITHUB="${GITHUB:-HippieStation/HippieStation}"
+DEBUG="${DEBUG:-FALSE}"
+DISPLAY_ERRORS="${DISPLAY_ERRORS:-FALSE}"
 EOF
 
 chown www-data:www-data /var/www/html/.env
