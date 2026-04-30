@@ -155,10 +155,23 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /root/.byond/bin
 
-# BSQL: download pre-built (still needed for database connectivity)
+# BSQL: download pre-built and scatter to every location dlopen("BSQL") might search,
+# using every filename variant BYOND might try (BSQL, BSQL.so, libBSQL.so).
 RUN curl -fsSL \
         "https://github.com/tgstation/BSQL/releases/download/v1.4.0.0/libBSQL.so" \
-        -o /tgstation/libBSQL.so
+        -o /tmp/libBSQL.so \
+    && cp /tmp/libBSQL.so /tgstation/libBSQL.so \
+    && cp /tmp/libBSQL.so /tgstation/BSQL.so \
+    && cp /tmp/libBSQL.so /tgstation/BSQL \
+    && cp /tmp/libBSQL.so /opt/byond/bin/libBSQL.so \
+    && cp /tmp/libBSQL.so /opt/byond/bin/BSQL.so \
+    && cp /tmp/libBSQL.so /opt/byond/bin/BSQL \
+    && cp /tmp/libBSQL.so /opt/byond/libBSQL.so \
+    && cp /tmp/libBSQL.so /opt/byond/BSQL.so \
+    && cp /tmp/libBSQL.so /opt/byond/BSQL \
+    && cp /tmp/libBSQL.so /usr/lib/i386-linux-gnu/libBSQL.so \
+    && cp /tmp/libBSQL.so /usr/local/lib/libBSQL.so \
+    && rm /tmp/libBSQL.so
 
 # Compiled game (hippiestation.dmb, .rsc, _maps, sound, strings, icons)
 COPY --from=dm_compiler /deploy ./
