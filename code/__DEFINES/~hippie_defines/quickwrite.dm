@@ -1,4 +1,6 @@
-#define QUICKWRITE (world.system_type == MS_WINDOWS ? "quickwrite.dll" : "libquickwrite.so")
+// BYOND 515+ requires call() to use a compile-time constant library name.
+// Production runs on Linux inside Docker; adjust to "quickwrite.dll" for Windows dev builds.
+#define QUICKWRITE "libquickwrite.so"
 
 #define QUICKWRITE_OPEN(filename) call(QUICKWRITE, "open_file")(filename)
 #define QUICKWRITE_CLOSE(filename) call(QUICKWRITE, "close_file")(filename)

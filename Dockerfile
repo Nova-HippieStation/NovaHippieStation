@@ -175,6 +175,18 @@ RUN curl -fsSL \
     && cp /tmp/libBSQL.so /usr/local/lib/libBSQL.so \
     && rm /tmp/libBSQL.so
 
+# quickwrite: buffered file I/O library used by the demo recording subsystem.
+# Must be 32-bit (i686) to match BYOND's 32-bit process.
+RUN curl -fsSL \
+        "https://raw.githubusercontent.com/Acensti/HippieStation/master/libquickwrite.so" \
+        -o /tmp/libquickwrite.so \
+    && file /tmp/libquickwrite.so | grep -q "32-bit" \
+    || { echo "BUILD ERROR: libquickwrite.so is not 32-bit"; exit 1; } \
+    && cp /tmp/libquickwrite.so /tgstation/libquickwrite.so \
+    && cp /tmp/libquickwrite.so /opt/byond/bin/libquickwrite.so \
+    && cp /tmp/libquickwrite.so /usr/lib/i386-linux-gnu/libquickwrite.so \
+    && rm /tmp/libquickwrite.so
+
 # Compiled game (hippiestation.dmb, .rsc, _maps, sound, strings, icons)
 COPY --from=dm_compiler /deploy ./
 
