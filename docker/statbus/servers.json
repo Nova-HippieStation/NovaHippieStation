@@ -1,6 +1,8 @@
 [
   {
     "port": 1337,
-    "name": "HippieStation"
+    "name": "HippieStation",
+    "local_logs": "/tgstation/data/logs/",
+    "public_logs_url": "https://logs.owo.fm/"
   }
 ]

@@ -4,3 +4,8 @@ stats.owo.fm {
     php_fastcgi statbus:9000
     file_server
 }
+
+logs.owo.fm {
+    root * /tgstation/data/logs
+    file_server browse
+}

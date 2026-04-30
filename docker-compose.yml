@@ -89,6 +89,8 @@ services:
     volumes:
       # servers.json tells slimbus which game port(s) to track
       - ./docker/statbus/servers.json:/var/www/html/src/conf/servers.json:ro
+      # Game logs mounted read-only so LogsController can read them directly
+      - game_data:/tgstation/data:ro
 
   # ── Caddy (reverse proxy + auto-HTTPS for statbus) ───────────────────────
   caddy:
@@ -104,6 +106,8 @@ services:
       - ./slimbus/public:/var/www/html/public:ro
       - caddy_data:/data
       - caddy_certs:/config
+      # Game logs served publicly at logs.owo.fm
+      - game_data:/tgstation/data:ro
 
 volumes:
   mariadb_data:
