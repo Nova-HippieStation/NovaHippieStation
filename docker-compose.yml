@@ -111,6 +111,24 @@ services:
       # Tile output shared with Caddy
       - webmap_tiles:/tiles
 
+  # ── Demo viewer builder ───────────────────────────────────────────────────
+  #
+  # Clones Nova-HippieStation/demo-viewer, patches it, and builds a static
+  # bundle into the demo_viewer_dist volume.  Runs once and exits; Caddy
+  # picks up those files at demo.owo.fm.
+  #
+  # To force a rebuild after upstream changes:
+  #   docker-compose build demo-viewer-builder
+  #   docker volume rm <project>_demo_viewer_dist
+  #   docker-compose up demo-viewer-builder
+  demo-viewer-builder:
+    build:
+      context: .
+      dockerfile: docker/demo-viewer/Dockerfile
+    restart: "no"
+    volumes:
+      - demo_viewer_dist:/dist
+
   # ── Caddy (reverse proxy + auto-HTTPS for statbus) ───────────────────────
   caddy:
     image: caddy:2-alpine
@@ -129,6 +147,8 @@ services:
       - game_data:/tgstation/data:ro
       # Pre-rendered map tiles served at webmap.owo.fm
       - webmap_tiles:/srv/webmap:ro
+      # Built demo viewer SPA served at demo.owo.fm
+      - demo_viewer_dist:/srv/demo-viewer:ro
 
 volumes:
   mariadb_data:
@@ -137,3 +157,4 @@ volumes:
   caddy_data:
   caddy_certs:
   webmap_tiles:
+  demo_viewer_dist:

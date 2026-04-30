@@ -8,6 +8,15 @@ stats.owo.fm {
 logs.owo.fm {
     root * /tgstation/data/logs
     file_server browse
+
+    # Allow the demo viewer (demo.owo.fm) to fetch demo.log files cross-origin.
+    header Access-Control-Allow-Origin "*"
+}
+
+demo.owo.fm {
+    root * /srv/demo-viewer
+    file_server
+    header Access-Control-Allow-Origin "*"
 }
 
 webmap.owo.fm {
