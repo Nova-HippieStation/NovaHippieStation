@@ -1,6 +1,6 @@
 # HippieStation — Docker Compose
 #
-# Services: mariadb · game (BYOND 516) · statbus (slimbus PHP-FPM) · nginx
+# Services: mariadb · game (BYOND 516) · statbus (slimbus PHP-FPM) · caddy
 #
 # Quick start:
 #   cp .env.example .env        # fill in MYSQL_ROOT_PASSWORD + MYSQL_PASSWORD
@@ -53,10 +53,9 @@ services:
       MYSQL_USER: ss13
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      # Host config/ used as a read-only template; entrypoint syncs to the
-      # writable named volume so the game can write its own runtime config.
-      - ./config:/config-src:ro
-      - game_config:/tgstation/config
+      # Config folder bind-mounted directly — any edits on the host are
+      # reflected immediately, and picked up when DreamDaemon next restarts.
+      - ./config:/tgstation/config
       - game_data:/tgstation/data
 
   # ── Statbus (slimbus PHP-FPM) ─────────────────────────────────────────────
@@ -152,7 +151,6 @@ services:
 
 volumes:
   mariadb_data:
-  game_config:
   game_data:
   caddy_data:
   caddy_certs:

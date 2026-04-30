@@ -10,14 +10,6 @@ MYSQL_HOST="${MYSQL_HOST:-mariadb}"
 MYSQL_USER="${MYSQL_USER:-ss13}"
 MYSQL_PASSWORD="${MYSQL_PASSWORD:?MYSQL_PASSWORD must be set}"
 
-# ── Sync host config template into the writable volume ───────────────────────
-# /config-src is the host ./config mounted read-only; /tgstation/config is the
-# writable named volume the game writes to.  -a preserves timestamps; -n skips
-# files that already exist (preserves admin/player edits across restarts).
-if [ -d /config-src ]; then
-    cp -an /config-src/. /tgstation/config/
-fi
-
 # ── Generate dbconfig.txt ─────────────────────────────────────────────────────
 # Overwritten every start so it always reflects the current env vars.
 mkdir -p /tgstation/config
