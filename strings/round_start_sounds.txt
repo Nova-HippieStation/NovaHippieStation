@@ -1,0 +1,19 @@
+﻿config/title_music/sounds/Amon Tobin - Nova.mp3
+config/title_music/sounds/Harrison - Comfort Cruise.mp3
+config/title_music/sounds/Jackson and His Computerband - SMASH.mp3
+config/title_music/sounds/Mac DeMarco - Don Juan.mp3
+config/title_music/sounds/Mac DeMarco - Goodbye Weekend.mp3
+config/title_music/sounds/Mac DeMarco - Passing Out Piece.mp3
+config/title_music/sounds/Makeout Videotape - Island Groovies.mp3
+config/title_music/sounds/pilotredsun - scotty.mp3
+config/title_music/sounds/PNS - Concert At An Empty Space Station.mp3
+config/title_music/sounds/Röyksopp - In Space.mp3
+config/title_music/sounds/Röyksopp - She's So.mp3
+config/title_music/sounds/SAINT PEPSI - Better.mp3
+config/title_music/sounds/SAINT PEPSI - Skylar Spence.mp3
+config/title_music/sounds/Saints Row Soundtrack - Week-End Pop.mp3
+config/title_music/sounds/Schizoid Enthusiast - lietome/landingpad.mp3
+config/title_music/sounds/Tally Hall - &.mp3
+config/title_music/sounds/Tally Hall - Good Day.mp3
+config/title_music/sounds/The Aquabats - Chemical Bomb.mp3
+config/title_music/sounds/The Aquabats - Meltdown.mp3

@@ -1,0 +1,50 @@
+# ── Version control ───────────────────────────────────────────────────────────
+.git
+.git/hooks
+.git/info
+.git/modules
+.git/objects
+.git/refs
+.gitignore
+.gitattributes
+.github
+
+# ── IDE / editor ──────────────────────────────────────────────────────────────
+.vs
+.vscode
+.editorconfig
+
+# ── CI ────────────────────────────────────────────────────────────────────────
+appveyor.yml
+.travis.yml
+TGS3.json
+
+# ── Node (installed fresh inside the tgui_builder stage) ─────────────────────
+tgui/node_modules
+tgui-next/node_modules
+
+# ── BYOND compile outputs (generated inside dm_compiler stage) ────────────────
+hippiestation.dmb
+hippiestation.int
+hippiestation.rsc
+hippiestation.lk
+hippiestation.dyn.rsc
+
+# ── Windows DLLs (we build .so files from source inside Docker) ───────────────
+*.dll
+
+# ── Runtime data (never baked into the image) ─────────────────────────────────
+data/
+cfg/
+
+# ── Documentation / chat logs ─────────────────────────────────────────────────
+README.md
+GPLv3.txt
+LICENSE
+NOTES.md
+HIPPIESTATION_FIX_REFERENCE.md
+TGUI_FIX_NOTES.md
+cursor_*.md
+
+# ── Cursor IDE workspace ───────────────────────────────────────────────────────
+.cursor/

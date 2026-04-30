@@ -1,0 +1,110 @@
+# HippieStation — Docker Compose
+#
+# Services: mariadb · game (BYOND 516) · statbus (slimbus PHP-FPM) · nginx
+#
+# Quick start:
+#   cp .env.example .env        # fill in MYSQL_ROOT_PASSWORD + MYSQL_PASSWORD
+#   docker compose build
+#   docker compose up -d
+#
+# Ports exposed on the host:
+#   1337      — BYOND game port (clients connect here)
+#   8080      — Statbus web UI  (http://localhost:8080)
+#   3306      — MariaDB         (optional; for local DB tooling)
+
+services:
+
+  # ── Database ─────────────────────────────────────────────────────────────
+  mariadb:
+    build:
+      context: .
+      dockerfile: docker/mariadb/Dockerfile
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ss13
+      MYSQL_USER: ss13
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set MYSQL_PASSWORD in .env}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  # ── BYOND game server ─────────────────────────────────────────────────────
+  game:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    ports:
+      - "${GAME_PORT:-1337}:1337/tcp"
+      - "${GAME_PORT:-1337}:1337/udp"
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_USER: ss13
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      # Host config/ used as a read-only template; entrypoint syncs to the
+      # writable named volume so the game can write its own runtime config.
+      - ./config:/config-src:ro
+      - game_config:/tgstation/config
+      - game_data:/tgstation/data
+
+  # ── Statbus (slimbus PHP-FPM) ─────────────────────────────────────────────
+  statbus:
+    build:
+      context: .
+      dockerfile: docker/statbus/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      DB_METHOD: mysql
+      DB_DATABASE: ss13
+      DB_USERNAME: ss13
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      DB_PREFIX: ss13
+      ALT_DB_METHOD: mysql
+      ALT_DB_DATABASE: statbus
+      ALT_DB_USERNAME: ss13
+      ALT_DB_PASSWORD: ${MYSQL_PASSWORD}
+      ALT_DB_HOST: mariadb
+      ALT_DB_PORT: "3306"
+      APP: "${STATBUS_APP:-HippieStation Statbus}"
+      GITHUB: "${GITHUB:-HippieStation/HippieStation}"
+      DEBUG: "FALSE"
+      DISPLAY_ERRORS: "FALSE"
+    volumes:
+      # servers.json tells slimbus which game port(s) to track
+      - ./docker/statbus/servers.json:/var/www/html/src/conf/servers.json:ro
+
+  # ── Nginx (reverse proxy for statbus) ─────────────────────────────────────
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    depends_on:
+      - statbus
+    ports:
+      - "${STATBUS_PORT:-8080}:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Serve slimbus static assets directly from source so nginx doesn't
+      # round-trip static files through PHP-FPM.
+      - ./slimbus/public:/var/www/html/public:ro
+
+volumes:
+  mariadb_data:
+  game_config:
+  game_data:
