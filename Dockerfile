@@ -153,7 +153,9 @@ RUN apt-get update \
         libsqlite3-0:i386 \
         zlib1g:i386 \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /root/.byond/bin
+    && mkdir -p /root/.byond/bin \
+    && ln -sf /usr/lib/i386-linux-gnu/libmariadb.so.3 \
+              /usr/lib/i386-linux-gnu/libmariadb.so.2
 
 # BSQL: download pre-built and scatter to every location dlopen("BSQL") might search,
 # using every filename variant BYOND might try (BSQL, BSQL.so, libBSQL.so).
