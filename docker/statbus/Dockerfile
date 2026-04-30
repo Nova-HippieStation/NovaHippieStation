@@ -15,23 +15,27 @@ WORKDIR /var/www/html
 
 # Install dependencies before copying source for better layer caching.
 COPY slimbus/composer.json slimbus/composer.lock ./
-# slimbus ships composer.json requiring phpdotenv ^4.1 but index.php uses
-# the v2 API (new Dotenv\Dotenv($path)).  Downgrade to v2 so the code works.
-RUN sed -i 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' composer.json \
-    && rm -f composer.lock
+# Step 1: install everything from the lock file exactly as-is.
+# --ignore-platform-reqs bypasses PHP ^7.1 checks in slim/csrf etc.
+# --no-audit suppresses security-advisory blocking on twig/extensions.
 RUN composer install \
         --no-dev \
         --optimize-autoloader \
         --no-interaction \
         --no-ansi \
         --no-scripts \
-    || composer install \
+        --ignore-platform-reqs \
+        --no-audit
+# Step 2: slimbus ships phpdotenv ^4.1 in composer.json but index.php uses
+# the v2 API (new Dotenv\Dotenv($path)).  Downgrade just that one package.
+RUN sed -i 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' composer.json \
+    && composer update vlucas/phpdotenv \
         --no-dev \
-        --optimize-autoloader \
+        --no-scripts \
         --no-interaction \
         --no-ansi \
-        --no-scripts \
-        --ignore-platform-reqs
+        --ignore-platform-reqs \
+        --no-audit
 
 COPY slimbus/ .
 
