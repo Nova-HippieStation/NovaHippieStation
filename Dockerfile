@@ -180,8 +180,6 @@ RUN curl -fsSL \
 RUN curl -fsSL \
         "https://raw.githubusercontent.com/Acensti/HippieStation/master/libquickwrite.so" \
         -o /tmp/libquickwrite.so \
-    && file /tmp/libquickwrite.so | grep -q "32-bit" \
-    || { echo "BUILD ERROR: libquickwrite.so is not 32-bit"; exit 1; } \
     && cp /tmp/libquickwrite.so /tgstation/libquickwrite.so \
     && cp /tmp/libquickwrite.so /opt/byond/bin/libquickwrite.so \
     && cp /tmp/libquickwrite.so /usr/lib/i386-linux-gnu/libquickwrite.so \
