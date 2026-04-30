@@ -26,12 +26,14 @@ fi
 echo "[webmap] Rendering map with dmm-tools …"
 mkdir -p "$MAPS_TMP"
 
-# The -o flag sets the output directory (defaults to data/minimaps/).
-# The environment file is tgstation.dme (HippieStation keeps the upstream name).
+# dmm-tools resolves #include paths relative to $CWD (not the DME file's
+# directory).  The official docs say: "cd path/to/tgstation/ first".
+# -o sets the output directory (default is data/minimaps/).
+cd "$SRC"
 dmm-tools minimap \
     -o "$MAPS_TMP/" \
-    "$SRC/tgstation.dme" \
-    "$SRC/_maps/map_files/HippieStation/hippiestation.dmm" \
+    tgstation.dme \
+    _maps/map_files/HippieStation/hippiestation.dmm \
     2>&1 \
 || echo "[webmap] Warning: dmm-tools returned non-zero (parse warnings are normal)"
 
