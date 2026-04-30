@@ -35,4 +35,4 @@ TOKEN_CONSUMER http://127.0.0.1:9000/byondLinker.php
 #IPSTACK_API_KEY
 
 ## Enables the Replay/Demo subsystem. This is now an option because it has high cpu/ram usage.
-#ENABLE_DEMO
+ENABLE_DEMO
