@@ -26,11 +26,16 @@ fi
 echo "[webmap] Rendering map with dmm-tools …"
 mkdir -p "$MAPS_TMP"
 
-dmm-tools minimap "$SRC/hippiestation.dme" \
-    "$SRC/_maps/map_files/HippieStation/hippiestation.dmm" \
-    --output "$MAPS_TMP/" \
-    2>&1 \
-|| echo "[webmap] Warning: dmm-tools returned a non-zero exit code (parse warnings are normal)"
+# dmm-tools minimap v1.11+ removed the --output flag; it always writes PNGs
+# to the current working directory.  Use a subshell to cd into MAPS_TMP so
+# the PNGs land in the right place without polluting other directories.
+(
+  cd "$MAPS_TMP"
+  dmm-tools minimap \
+      "$SRC/hippiestation.dme" \
+      "$SRC/_maps/map_files/HippieStation/hippiestation.dmm" \
+      2>&1
+) || echo "[webmap] Warning: dmm-tools returned non-zero (parse warnings are normal)"
 
 echo "[webmap] Rendered PNGs:"
 ls "$MAPS_TMP"/*.png 2>/dev/null || { echo "[webmap] ERROR: No PNGs produced!"; exit 1; }
