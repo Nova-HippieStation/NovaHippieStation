@@ -163,9 +163,24 @@ RUN curl -fsSL \
 # Compiled game (hippiestation.dmb, .rsc, _maps, sound, strings, icons)
 COPY --from=dm_compiler /deploy ./
 
-# rust_g: copied AFTER the deploy overlay so deploy.sh's missing rust_g.dll
-# warning cannot clobber or shadow the compiled-from-source 32-bit .so
+# rust_g: scatter to every location dlopen("rust_g") might search.
+# On Linux, dlopen("rust_g") searches LD_LIBRARY_PATH and standard lib paths —
+# it does NOT look in the current working directory unless you pass "./rust_g".
+# BYOND 515+ uses call_ext which calls dlopen with the bare name "rust_g", so we
+# need the file present in LD_LIBRARY_PATH (/opt/byond/bin) and the game dir.
 COPY --from=rust_g_builder /librust_g.so /tgstation/rust_g
+COPY --from=rust_g_builder /librust_g.so /tgstation/rust_g.so
+COPY --from=rust_g_builder /librust_g.so /tgstation/librust_g.so
+COPY --from=rust_g_builder /librust_g.so /opt/byond/bin/rust_g
+COPY --from=rust_g_builder /librust_g.so /opt/byond/bin/rust_g.so
+COPY --from=rust_g_builder /librust_g.so /opt/byond/bin/librust_g.so
+COPY --from=rust_g_builder /librust_g.so /opt/byond/rust_g
+COPY --from=rust_g_builder /librust_g.so /opt/byond/rust_g.so
+COPY --from=rust_g_builder /librust_g.so /opt/byond/librust_g.so
+COPY --from=rust_g_builder /librust_g.so /usr/lib/i386-linux-gnu/rust_g.so
+COPY --from=rust_g_builder /librust_g.so /usr/lib/i386-linux-gnu/librust_g.so
+COPY --from=rust_g_builder /librust_g.so /usr/local/lib/rust_g.so
+COPY --from=rust_g_builder /librust_g.so /usr/local/lib/librust_g.so
 
 COPY docker/game/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
