@@ -59,6 +59,22 @@ for f in "$MAPS_TMP/"Lavaland-*.png "$MAPS_TMP/"lavaland-*.png; do
     mv "$f" "$MAPS_TMP/z2_level${num}.png"
 done
 
+# ── z=3: CentCom ──────────────────────────────────────────────────────────────
+echo "[webmap] Rendering z=3 (centcom) …"
+dmm-tools minimap \
+    -o "$MAPS_TMP/" \
+    tgstation.dme \
+    _maps/map_files/generic/CentCom.dmm \
+    2>&1 \
+|| echo "[webmap] Warning: dmm-tools returned non-zero (parse warnings are normal)"
+
+# Rename CentCom-N.png → z3_levelN.png
+for f in "$MAPS_TMP/"CentCom-*.png "$MAPS_TMP/"centcom-*.png; do
+    [ -f "$f" ] || continue
+    num=$(echo "$f" | grep -o '[0-9]*\.png$' | grep -o '[0-9]*')
+    mv "$f" "$MAPS_TMP/z3_level${num}.png"
+done
+
 echo "[webmap] All rendered PNGs:"
 ls "$MAPS_TMP"/*.png 2>/dev/null || { echo "[webmap] ERROR: No PNGs produced!"; exit 1; }
 

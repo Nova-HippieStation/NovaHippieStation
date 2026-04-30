@@ -7,8 +7,8 @@
     "webmap": {
       "tiles": "https://webmap.owo.fm/hippiestation",
       "main_z": 1,
-      "z_levels": [1, 2],
-      "z_names": ["Station", "Lavaland"]
+      "z_levels": [1, 2, 3],
+      "z_names": ["Station", "Lavaland", "CentCom"]
     }
   }
 ]
