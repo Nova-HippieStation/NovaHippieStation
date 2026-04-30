@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-bookworm
+FROM php:7.4-fpm-bullseye
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -15,26 +15,18 @@ WORKDIR /var/www/html
 
 # Install dependencies before copying source for better layer caching.
 COPY slimbus/composer.json slimbus/composer.lock ./
-# Step 1: install everything from the lock file exactly as-is.
-# --ignore-platform-reqs bypasses PHP ^7.1 checks in slim/csrf etc.
-# --no-audit suppresses security-advisory blocking on twig/extensions.
+# slimbus index.php uses the phpdotenv v2 API (new Dotenv\Dotenv($path)) but
+# composer.json requires ^4.1.  Pin to v2 and drop the lock so it re-resolves.
+# PHP 7.4 satisfies slim/csrf ^7.1 natively.
+# --no-security-blocking skips the twig/extensions advisory.
+RUN sed -i 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' composer.json \
+    && rm -f composer.lock
 RUN composer install \
         --no-dev \
         --optimize-autoloader \
         --no-interaction \
         --no-ansi \
         --no-scripts \
-        --ignore-platform-reqs \
-        --no-security-blocking
-# Step 2: slimbus ships phpdotenv ^4.1 in composer.json but index.php uses
-# the v2 API (new Dotenv\Dotenv($path)).  Downgrade just that one package.
-RUN sed -i 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' composer.json \
-    && composer update vlucas/phpdotenv \
-        --no-dev \
-        --no-scripts \
-        --no-interaction \
-        --no-ansi \
-        --ignore-platform-reqs \
         --no-security-blocking
 
 COPY slimbus/ .
