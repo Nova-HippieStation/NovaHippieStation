@@ -76,12 +76,14 @@ def main():
     min_zoom   = int(sys.argv[3]) if len(sys.argv) > 3 else 0
     max_zoom   = int(sys.argv[4]) if len(sys.argv) > 4 else 5
 
-    # dmm-tools names outputs like "hippiestation-1.png" (no 'z' prefix)
-    z_pattern = re.compile(r"-(\d+)\.png$", re.IGNORECASE)
+    # render.sh renames files to z<N>_level<M>.png before calling tile.py
+    # e.g. z1_level1.png → tiles/1/  (game z-level 1 = station)
+    #      z2_level1.png → tiles/2/  (game z-level 2 = lavaland)
+    z_pattern = re.compile(r"^z(\d+)_level\d+\.png$", re.IGNORECASE)
 
     processed = 0
     for f in sorted(input_dir.iterdir()):
-        m = z_pattern.search(f.name)
+        m = z_pattern.match(f.name)
         if not m:
             continue
         z_level = m.group(1)
@@ -90,6 +92,7 @@ def main():
         print(f"\nTiling z-level {z_level}: {f.name}")
         tile_image(f, z_out, min_zoom, max_zoom)
         processed += 1
+
 
     if processed == 0:
         print("\nERROR: No *-z<N>.png files found in", input_dir)
