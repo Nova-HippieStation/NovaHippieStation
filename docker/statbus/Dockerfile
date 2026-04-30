@@ -25,7 +25,7 @@ RUN composer install \
         --no-ansi \
         --no-scripts \
         --ignore-platform-reqs \
-        --no-audit
+        --no-security-blocking
 # Step 2: slimbus ships phpdotenv ^4.1 in composer.json but index.php uses
 # the v2 API (new Dotenv\Dotenv($path)).  Downgrade just that one package.
 RUN sed -i 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' composer.json \
@@ -35,7 +35,7 @@ RUN sed -i 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' composer.
         --no-interaction \
         --no-ansi \
         --ignore-platform-reqs \
-        --no-audit
+        --no-security-blocking
 
 COPY slimbus/ .
 
