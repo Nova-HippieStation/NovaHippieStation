@@ -26,8 +26,12 @@ RUN apt-get update \
 # Building from source guarantees the binary matches the host OS/libc.
 RUN git clone --depth=1 https://github.com/SpaceManiac/SpacemanDMM.git /spacedmm
 WORKDIR /spacedmm
-RUN cargo build --release -p dmm-tools \
-    && strip target/release/dmm-tools
+# --bin dmm-tools targets the binary by name across the whole workspace;
+# -p dmm-tools would only build the package (which may be library-only).
+# strip is best-effort: it reduces binary size but isn't required.
+RUN cargo build --release --bin dmm-tools \
+    && (strip target/release/dmm-tools 2>/dev/null || true) \
+    && echo "Built: $(ls -lh target/release/dmm-tools)"
 
 # ── Stage 2: runtime renderer image ──────────────────────────────────────────
 FROM python:3.12-slim-bookworm
