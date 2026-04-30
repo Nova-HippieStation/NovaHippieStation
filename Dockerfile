@@ -74,6 +74,11 @@ RUN git clone --depth=1 --branch=0.4.10 \
 
 WORKDIR /rust-g
 
+# 0.4.10 bug: GenericImageError variant in src/error.rs references ImageError
+# from the `image` crate which is not compiled when the dmi feature is excluded.
+# Same class of bug as 6.1.0's Dmi variant. Patch it before building.
+RUN sed -i '/GenericImageError(#\[from\] ImageError)/i\    #[cfg(feature = "dmi")]' src/error.rs
+
 RUN cargo build --release \
         --target=i686-unknown-linux-gnu \
         --no-default-features \
