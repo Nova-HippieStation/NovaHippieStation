@@ -4,7 +4,6 @@
     "name": "HippieStation",
     "local_logs": "/tgstation/data/logs/",
     "public_logs_url": "https://logs.owo.fm/",
-    "demo_viewer": "https://demo.hippiestation.com",
     "webmap": {
       "tiles": "https://webmap.owo.fm/hippiestation",
       "main_z": 1,
