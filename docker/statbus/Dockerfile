@@ -23,6 +23,7 @@ RUN sed -i \
         -e 's|"vlucas/phpdotenv": "[^"]*"|"vlucas/phpdotenv": "^2.6"|' \
         -e 's|"slim/slim": "[^"]*"|"slim/slim": "^3.12"|' \
         -e 's|"slim/twig-view": "[^"]*"|"slim/twig-view": "^2.0"|' \
+        -e 's|"slim/csrf": "[^"]*"|"slim/csrf": "^0.8"|' \
         composer.json \
     && rm -f composer.lock
 RUN composer install \
