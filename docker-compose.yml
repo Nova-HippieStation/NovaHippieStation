@@ -75,7 +75,7 @@ services:
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_HOST: mariadb
       DB_PORT: "3306"
-      DB_PREFIX: ss13
+      DB_PREFIX: "SS13_"
       ALT_DB_METHOD: mysql
       ALT_DB_DATABASE: statbus
       ALT_DB_USERNAME: ss13
