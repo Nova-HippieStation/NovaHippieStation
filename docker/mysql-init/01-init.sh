@@ -17,7 +17,7 @@ SQL
 
 # ── Load tgstation game schema ────────────────────────────────────────────────
 mysql -u root -p"${MYSQL_ROOT_PASSWORD}" ss13 \
-    < "${SCHEMA}/tgstation_schema.sql"
+    < "${SCHEMA}/tgstation_schema_prefixed.sql"
 
 # ── Load HippieStation extras into ss13 ──────────────────────────────────────
 mysql -u root -p"${MYSQL_ROOT_PASSWORD}" ss13 \
