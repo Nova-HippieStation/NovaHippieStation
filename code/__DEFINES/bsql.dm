@@ -1,5 +1,5 @@
 //BSQL - DMAPI
-#define BSQL_VERSION "v1.4.0.0"
+#define BSQL_VERSION "v1.3.0.0"
 
 // Linux only — BYOND 515+ requires a compile-time constant in call_ext()
 #define BSQL_LIB_PATH "libBSQL.so"
