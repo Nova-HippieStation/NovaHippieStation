@@ -76,8 +76,8 @@ def main():
     min_zoom   = int(sys.argv[3]) if len(sys.argv) > 3 else 0
     max_zoom   = int(sys.argv[4]) if len(sys.argv) > 4 else 5
 
-    # dmm-tools names outputs like "hippiestation-z2.png"
-    z_pattern = re.compile(r"-z(\d+)\.png$", re.IGNORECASE)
+    # dmm-tools names outputs like "hippiestation-1.png" (no 'z' prefix)
+    z_pattern = re.compile(r"-(\d+)\.png$", re.IGNORECASE)
 
     processed = 0
     for f in sorted(input_dir.iterdir()):
