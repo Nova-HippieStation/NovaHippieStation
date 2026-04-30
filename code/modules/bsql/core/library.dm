@@ -18,12 +18,14 @@
 		return
 
 	var/version = _BSQL_Internal_Call("Version")
+	log_world("BSQL DEBUG: Version() returned '[version == null ? "NULL" : version]', expected '[BSQL_VERSION]'")
 	if(version != BSQL_VERSION)
 		BSQL_DEL_CALL(caller)
 		BSQL_ERROR("BSQL DMAPI version mismatch! Expected [BSQL_VERSION], got [version == null ? "NULL" : version]!")
 		return
 
 	var/result = _BSQL_Internal_Call("Initialize")
+	log_world("BSQL DEBUG: Initialize() returned '[result == null ? "NULL (success)" : result]'")
 	if(result)
 		BSQL_DEL_CALL(caller)
 		BSQL_ERROR(result)
