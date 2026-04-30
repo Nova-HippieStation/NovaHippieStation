@@ -36,6 +36,9 @@ RUN composer install \
 
 COPY slimbus/ .
 
+# Regenerate the classmap now that the application source is in place.
+RUN composer dump-autoload --optimize --no-interaction --no-ansi
+
 RUN mkdir -p tmp/twig \
     && chown -R www-data:www-data /var/www/html/tmp /var/www/html/public \
     && chmod -R ug+rwX /var/www/html/tmp
