@@ -5,7 +5,7 @@
     "local_logs": "/tgstation/data/logs/",
     "public_logs_url": "https://logs.owo.fm/",
     "webmap": {
-      "tiles": "https://mocha.affectedarc07.co.uk/webmap/hippie/hippiestation",
+      "image_base": "https://mocha.affectedarc07.co.uk/webmap/hippie/hippiestation/hippiestation",
       "main_z": 2,
       "z_levels": [1, 2, 3, 4, 5],
       "z_names": ["Space/CentComm", "Station", "Lavaland", "Z4", "Z5"]
