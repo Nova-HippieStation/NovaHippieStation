@@ -92,6 +92,25 @@ services:
       # Game logs mounted read-only so LogsController can read them directly
       - game_data:/tgstation/data:ro
 
+  # ── Webmap tile renderer ──────────────────────────────────────────────────
+  #
+  # Runs ONCE on `docker-compose up`, writes XYZ tile pyramid to webmap_tiles
+  # volume, then exits.  Caddy picks up those tiles at webmap.owo.fm.
+  #
+  # To force a re-render after a map update:
+  #   docker volume rm <project>_webmap_tiles
+  #   docker-compose up webmap-renderer
+  webmap-renderer:
+    build:
+      context: .
+      dockerfile: docker/webmap/Dockerfile
+    restart: "no"
+    volumes:
+      # Full repo bind-mounted read-only — dmm-tools needs icons + code + DMM
+      - .:/src:ro
+      # Tile output shared with Caddy
+      - webmap_tiles:/tiles
+
   # ── Caddy (reverse proxy + auto-HTTPS for statbus) ───────────────────────
   caddy:
     image: caddy:2-alpine
@@ -108,6 +127,8 @@ services:
       - caddy_certs:/config
       # Game logs served publicly at logs.owo.fm
       - game_data:/tgstation/data:ro
+      # Pre-rendered map tiles served at webmap.owo.fm
+      - webmap_tiles:/srv/webmap:ro
 
 volumes:
   mariadb_data:
@@ -115,3 +136,4 @@ volumes:
   game_data:
   caddy_data:
   caddy_certs:
+  webmap_tiles:

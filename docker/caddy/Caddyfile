@@ -9,3 +9,21 @@ logs.owo.fm {
     root * /tgstation/data/logs
     file_server browse
 }
+
+webmap.owo.fm {
+    root * /srv/webmap
+
+    # Tiles are immutable once rendered — browsers can cache for a week.
+    header Cache-Control "public, max-age=604800, immutable"
+
+    # Allow cross-origin requests so Leaflet can load tiles from a different
+    # origin than stats.owo.fm.
+    header Access-Control-Allow-Origin "*"
+
+    file_server
+
+    # Return a friendly 404 for missing tiles rather than a Caddy error page.
+    handle_errors {
+        respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+    }
+}
