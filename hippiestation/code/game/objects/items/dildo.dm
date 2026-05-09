@@ -11,6 +11,11 @@
 	hitsound = 'hippiestation/sound/misc/squishy.ogg'
 	attack_verb = list("slapped")
 
+
+/obj/item/dildo/Initialize()
+	. = ..()
+	qdel(src)
+
 /obj/item/dragon/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is shoving [src] down [user.p_their()] throat! It looks like they're trying to commit suicide.</span>")
 	return(OXYLOSS)
